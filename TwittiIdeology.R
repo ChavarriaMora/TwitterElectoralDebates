@@ -8,10 +8,10 @@ library (tidytext)
 library (lubridate) #to be able to manipulate time
 setwd("C:/Elias/1 Serious/Academia/publicaciones/1 WorkingPapers/TuitiIdeology/LIWCData")
 
-bearer_token <- "AAAAAAAAAAAAAAAAAAAAAKzNPAEAAAAA4i2sMirmlXNPBryoOr6SpMFhY9Q%3DyVCxU4eK9NuRwZQeRTb5oFlFoAGg9Xrh4kKwQqPvlBmOOBmF5s"
+bearer_token <- "XXX" #Here goes the bearer token, not included here because it's a password
 
 #Repretel
-DebateRepretel<-get_all_tweets(query = 'Eliecer Feinzaig OR Eliécer Feinzaig OR Eli Feinzaig OR Fabricio Alvarado OR Lineth Saborío OR Lineth Saborio OR Welmer Ramos OR Rodrigo Chaves OR José María Figueres OR Jose Maria Figueres OR José María Villalta OR Jose Maria Villalta OR #decision2022 OR #elecciones2022 OR #DebateRepretel', 
+DebateRepretel<-get_all_tweets(query = 'Eliecer Feinzaig OR EliÃ©cer Feinzaig OR Eli Feinzaig OR Fabricio Alvarado OR Lineth SaborÃ­o OR Lineth Saborio OR Welmer Ramos OR Rodrigo Chaves OR JosÃ© MarÃ­a Figueres OR Jose Maria Figueres OR JosÃ© MarÃ­a Villalta OR Jose Maria Villalta OR #decision2022 OR #elecciones2022 OR #DebateRepretel', 
                                start_tweets = "2022-02-03T02:00:00Z", 
                                end_tweets = "2022-02-03T08:00:00Z",
                                bearer_token = bearer_token,
@@ -22,7 +22,7 @@ df_DebateRepretel <- bind_tweets(data_path = "DebateRepretel", output_format = "
 write.csv(df_DebateRepretel, 'df_DebateRepretel.csv')
 
 #Teletica
-DebateTeletica<-get_all_tweets(query = 'Eliecer Feinzaig OR Eliécer Feinzaig OR Eli Feinzaig OR Fabricio Alvarado OR Lineth Saborío OR Lineth Saborio OR Welmer Ramos OR Rodrigo Chaves OR José María Figueres OR Jose Maria Figueres OR José María Villalta OR Jose Maria Villalta OR #decision2022 OR #elecciones2022 OR #DebateTeletica', 
+DebateTeletica<-get_all_tweets(query = 'Eliecer Feinzaig OR EliÃ©cer Feinzaig OR Eli Feinzaig OR Fabricio Alvarado OR Lineth SaborÃ­o OR Lineth Saborio OR Welmer Ramos OR Rodrigo Chaves OR JosÃ© MarÃ­a Figueres OR Jose Maria Figueres OR JosÃ© MarÃ­a Villalta OR Jose Maria Villalta OR #decision2022 OR #elecciones2022 OR #DebateTeletica', 
                        start_tweets = "2022-02-04T01:00:00Z", 
                        end_tweets = "2022-02-04T08:00:00Z",
                        bearer_token = bearer_token,
@@ -81,19 +81,19 @@ df<-df%>%
 #Use regular expressions for identifying a smaller database that uses an specific keyword
 #df$newobject <- grepl("[Tt][Rr][Uu][Mm][Pp]", df$text) #example for Trump, for every word in upper and lower case
 #basically, one per candidate or party
-df$feinzaig<-grepl("(eli|eli[e�]cer)|(feinzaig)|(eli|eli[e�]cer feinzaig)", df$clean_text) #This line creates a new column in the database identifying if the word appears in the 
-#tweet or not, in this case the word is 'eliecer feinzaig', 'eli�cer feinzaig', 'eli feinzaing'
+df$feinzaig<-grepl("(eli|eli[eé]cer)|(feinzaig)|(eli|eli[eé]cer feinzaig)", df$clean_text) #This line creates a new column in the database identifying if the word appears in the 
+#tweet or not, in this case the word is 'eliecer feinzaig', 'eliécer feinzaig', 'eli feinzaing'
 df$fabricio<-grepl("(fabricio)|(alvarado)|(fabricio alvarado)", df$clean_text) #"fabricio alvarado
-df$lineth<-grepl("(lineth)|(sabor[i�]o)|(lineth sabor[i�]o)", df$clean_text) #lineth saborio, lineth sabor�o
+df$lineth<-grepl("(lineth)|(sabor[ií]o)|(lineth sabor[ií]o)", df$clean_text) #lineth saborio, lineth saborío
 df$welmer<-grepl("(welmer)|(ramos)|(welmer ramos)", df$clean_text) #welmer ramos
 df$chaves<-grepl("(rodrigo)|(chaves)|(rodrigo chaves)", df$clean_text) #rodrigo chaves
-df$figueres<-grepl("(jos[�e] mar[�i]a figueres)|(figueres)", df$clean_text) #jose mar�a figueres, jose mar�a figueres, jos� mar�a figueres, notese que captura figueresm pero NO jose maria
-df$villalta<-grepl("(jos[�e] mar[�i]a villalta)|(villalta)", df$clean_text) #jose mar�a villalta, jose maria villalta
+df$figueres<-grepl("(jos[ée] mar[íi]a figueres)|(figueres)", df$clean_text) #jose maría figueres, jose maría figueres, josé maría figueres, notese que captura figueresm pero NO jose maria
+df$villalta<-grepl("(jos[ée] mar[íi]a villalta)|(villalta)", df$clean_text) #jose maría villalta, jose maria villalta
 
 #I can create a categorical based on the dummies with an ifelse
 df$candidate<-with(df, ifelse (feinzaig==T, "Feinzaig",
                                ifelse(fabricio==T, "Alvarado", 
-                                      ifelse(lineth==T, "Sabor�o",
+                                      ifelse(lineth==T, "Saborío",
                                              ifelse(welmer==T, "Ramos",
                                                     ifelse(chaves==T, "Chaves",
                                                            ifelse(figueres==T, "Figueres",
@@ -161,7 +161,7 @@ Authenticity_graphic_Repretel<-ggplot(data=df_images_authenticity_repretel,(aes(
           element_blank())+ #makes it so axis x has no text
   theme(plot.title=
           element_text(hjust=0.5, size=18))+
-  ylab("Lenguaje aut�ntico")+
+  ylab("Lenguaje auténtico")+
   xlab("")+
   theme(legend.position="none") 
 Authenticity_graphic_Repretel
@@ -174,7 +174,7 @@ Analytic_graphic_Repretel<-ggplot(data=df_images_analytic_repretel,(aes(x=Hour, 
           element_blank())+ #makes it so axis x has no text
   theme(plot.title=
           element_text(hjust=0.5, size=18))+
-  ylab("Lenguaje anal�tico")+
+  ylab("Lenguaje analítico")+
   xlab("")+
   theme(legend.position="none") 
 Analytic_graphic_Repretel
@@ -187,7 +187,7 @@ Authenticity_graphic_Teletica<-ggplot(data=df_images_authenticity_teletica,(aes(
           element_blank())+ #makes it so axis x has no text
   theme(plot.title=
           element_text(hjust=0.5, size=18))+
-  ylab("Lenguaje aut�ntico")+
+  ylab("Lenguaje auténtico")+
   xlab("")+
   theme(legend.position="none") 
 Authenticity_graphic_Teletica
@@ -200,7 +200,7 @@ Analytic_graphic_Teletica<-ggplot(data=df_images_analytic_teletica,(aes(x=Hour, 
           element_blank())+ #makes it so axis x has no text
   theme(plot.title=
           element_text(hjust=0.5, size=18))+
-  ylab("Lenguaje anal�tico")+
+  ylab("Lenguaje analítico")+
   xlab("")+
   theme(legend.position="none") 
 Analytic_graphic_Teletica
